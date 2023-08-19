@@ -82,6 +82,17 @@ function App() {
     );
   }
 
+  const buttonStyle = {
+    marginRight: 1,
+    textTransform: 'none',
+    '&.Mui-selected': {
+      backgroundColor: 'lightblue',
+      '&:hover': {
+        backgroundColor: 'lightblue',
+      },
+    },
+  };
+
   return (
     <Grid container direction="column" justifyContent="center" alignItems="center" spacing={2}>
       <Grid item>
@@ -96,21 +107,21 @@ function App() {
           exclusive
           onChange={handleButtonChange}
         >
-          <ToggleButton value="+" sx={{ marginRight: 1, textTransform: 'none' }}>
+          <ToggleButton value="+" sx={buttonStyle}>
             <Typography>
               Yes<br />
               I agree<br />
               Affirmative
             </Typography>
           </ToggleButton>
-          <ToggleButton value="?" sx={{ marginRight: 1, textTransform: 'none' }}>
+          <ToggleButton value="?" sx={buttonStyle}>
             <Typography>
               I don't understand<br />
               or I don't know<br />
               or I'm indifferent
             </Typography>
           </ToggleButton>
-          <ToggleButton value="-" sx={{ textTransform: 'none' }}>
+          <ToggleButton value="-" sx={buttonStyle}>
             <Typography>
               No<br />
               I disagree<br />
