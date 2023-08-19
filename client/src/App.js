@@ -3,10 +3,12 @@ import { Grid, Typography, ToggleButton, ToggleButtonGroup } from '@mui/material
 import axios from 'axios';
 
 function App() {
-  const [selectedButton, setSelectedButton] = React.useState("mu");
+  const [selectedButton, setSelectedButton] = React.useState(null);
   const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]);
   const [index, setIndex] = useState(null);
   const [question, setQuestion] = useState(null);
+  const [timer, setTimer] = useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,10 +18,40 @@ function App() {
       setIndex(0);
       setQuestions(questions);
       setQuestion(questions[0].question)
+      setSelectedButton("?");
     };
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    let countdown = null;
+    
+    if (index < questions.length) {
+      countdown = setInterval(() => {
+        setTimer(prevTimer => prevTimer > 0 ? prevTimer - 1 : 10);
+      }, 1000);
+    }
+
+    return () => clearInterval(countdown);
+  }, [index]);
+
+  useEffect(() => {
+    if (timer === 0) {
+      const allAnswers = [...answers, {question: questions[index], answer: selectedButton }];
+      setAnswers(allAnswers);
+      const next = index + 1;
+      setIndex(next);
+
+      if (next < questions.length) {
+        setQuestion(questions[next].question);
+        setSelectedButton("?");
+      }
+      else {
+        console.log(allAnswers);
+      }
+    }
+  }, [timer]);
 
   const handleButtonChange = (event, newButton) => {
     setSelectedButton(newButton);
@@ -45,21 +77,21 @@ function App() {
           exclusive
           onChange={handleButtonChange}
         >
-          <ToggleButton value="yes" sx={{ marginRight: 1, textTransform: 'none' }}>
+          <ToggleButton value="+" sx={{ marginRight: 1, textTransform: 'none' }}>
             <Typography>
               Yes<br />
               I agree<br />
               Affirmative
             </Typography>
           </ToggleButton>
-          <ToggleButton value="mu" sx={{ marginRight: 1, textTransform: 'none' }}>
+          <ToggleButton value="?" sx={{ marginRight: 1, textTransform: 'none' }}>
             <Typography>
               I don't understand<br />
               or I don't know<br />
               or I'm indifferent
             </Typography>
           </ToggleButton>
-          <ToggleButton value="no" sx={{ textTransform: 'none' }}>
+          <ToggleButton value="-" sx={{ textTransform: 'none' }}>
             <Typography>
               No<br />
               I disagree<br />
@@ -69,7 +101,7 @@ function App() {
         </ToggleButtonGroup>
       </Grid>
       <Grid item>
-        <Typography>a countdown timer</Typography>
+        <Typography>{ timer } seconds until next question</Typography>
       </Grid>
     </Grid>
   );
