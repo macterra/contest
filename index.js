@@ -19,6 +19,15 @@ for (let i = 0; i < lines.length; i += 2) {
 
 console.log(JSON.stringify(questions, null, 2));
 
+function shuffleArray(array) {
+    const arrayCopy = [...array];
+    for (let i = arrayCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arrayCopy[i], arrayCopy[j]] = [arrayCopy[j], arrayCopy[i]];
+    }
+    return arrayCopy;
+}
+
 app.use(morgan('dev'));
 app.use(express.json());
 
@@ -27,13 +36,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('/api/v1/next', async (req, res) => {
     try {
-        const questions = [];
-
-        for (let i = 1; i <= 3; i++) {
-            questions.push({ id: i, question: `question ${i}` });
-        }
-
-        res.json(questions);
+        const shuffledQuestions = shuffleArray(questions);
+        res.json(shuffledQuestions.slice(0, 3));
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ message: 'Error fetching questions' });
