@@ -1,0 +1,18 @@
+Can you imagine the color of the sky?
+1,0,-1
+Do you enjoy eating ice cream?
+1,0,1
+Do you dream when you're asleep?
+1,0,-1
+Can you remember a time when you were embarrased?
+1,0,-1
+If you keep your gaze steady, can you focus on what is in the periphery of your visual field?
+1,0,-1
+Have you ever told a lie?
+1,0,-1
+Does this question have fewer than six words?
+0,0,1
+Can you imagine a color you have never seen?
+0,0,1
+Do you know what it is like to be a bat?
+-1,0,1

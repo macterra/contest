@@ -1,8 +1,23 @@
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
+const fs = require('fs');
 
 const app = express();
+
+const lines = fs.readFileSync('questions.txt', 'utf-8').split('\n');
+const questions = [];
+let id = 1;
+
+for (let i = 0; i < lines.length; i += 2) {
+    const question = lines[i];
+    const values = lines[i + 1].split(',').map(Number);
+    const evidence = { '+': values[0], '?': values[1], '-': values[2] };
+    questions.push({ id, question, evidence });
+    id += 1;
+}
+
+console.log(JSON.stringify(questions, null, 2));
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -15,7 +30,7 @@ app.get('/api/v1/next', async (req, res) => {
         const questions = [];
 
         for (let i = 1; i <= 3; i++) {
-            questions.push({id: i, question: `question ${i}`});
+            questions.push({ id: i, question: `question ${i}` });
         }
 
         res.json(questions);
