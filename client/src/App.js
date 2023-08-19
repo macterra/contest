@@ -10,7 +10,7 @@ function App() {
   const [question, setQuestion] = useState(null);
   const [timer, setTimer] = useState(10);
   const [evidence, setEvidence] = useState(0);
-  const [confidence, setConfidence] = useState(null);
+  const [confidence, setConfidence] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,8 +38,9 @@ function App() {
     return () => clearInterval(countdown);
   }, [index, questions]);
 
-  function evidenceToProbability(evidence) {
-    return 1 / (1 + Math.exp(-evidence));
+  function bitsToConfidence(bits) {
+    const odds = Math.pow(2, bits);
+    return odds / (1 + odds);
   }
 
   const nextQuestion = async () => {
@@ -49,7 +50,7 @@ function App() {
     const bits = evidence + questions[index].evidence[selectedButton];
     setEvidence(bits);
 
-    const confidence = evidenceToProbability(bits) * 100;
+    const confidence = bitsToConfidence(bits) * 100;
     setConfidence(confidence);
 
     const next = index + 1;
@@ -125,7 +126,7 @@ function App() {
         <Typography>evidence: {evidence} bits</Typography>
       </Grid>
       <Grid item>
-        <Typography>confidence: {confidence}%</Typography>
+        <Typography>confidence: {confidence.toFixed(2)}%</Typography>
       </Grid>
     </Grid>
   );
