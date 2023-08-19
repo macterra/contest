@@ -10,6 +10,20 @@ app.use(express.json());
 // Serve the React frontend
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+app.get('/api/v1/next', async (req, res) => {
+    try {
+        const questions = [];
+
+        for (let i = 1; i <= 10; i++) {
+            questions.push({id: i, question: `question ${i}`});
+        }
+        
+        res.json(questions);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error fetching questions' });
+    }
+});
 
 app.use((req, res, next) => {
     if (!req.path.startsWith('/api')) {
